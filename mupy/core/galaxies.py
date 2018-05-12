@@ -1,3 +1,4 @@
+from astropy.coordinates import SkyCoord
 import astropy.units as u
 import numpy as np
 
@@ -15,8 +16,7 @@ class Galaxy(object):
                  zgrid: np.array) -> None:
 
         self.uid = uid
-        self.ra = ra
-        self.dec = dec
+        self.coord = SkyCoord(ra, dec)
         self.pz = redshift
         self.mz = mass
         self.zgrid = zgrid
@@ -30,8 +30,8 @@ class Galaxy(object):
 
         return 'Galaxy({uid}, {ra:.4f}, {dec:.4f})'.format(
             uid=self.uid,
-            ra=self.ra.to(u.degree),
-            dec=self.dec.to(u.degree)
+            ra=self.coord.ra.to(u.degree),
+            dec=self.coord.dec.to(u.degree)
         )
 
     def prob(self, zlow: [int, float], zhigh: [int, float]) -> float:
