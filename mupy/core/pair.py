@@ -19,13 +19,24 @@ class Pair(object):
         return 'Pair({}, {})'.format(self.primary, self.secondary)
 
     @property
-    def pair_pdf(self):
-        """Calculate the combined redshift probability function"""
+    def pair_pdf(self) -> np.ndarray:
+        """Calculate the combined redshift probability function
+
+        Returns:
+            np.ndarray
+        """
 
         numerator = self.primary.pz * self.secondary.pz
         denominator = 0.5 * (self.primary.pz + self.secondary.pz)
 
         return numerator / denominator
+
+    def mass_mask(self, pri_lim, sec_lim, max_mass):
+
+        pri_mask = np.logical_and(self.primary.mz >= pri_lim, pri_lim <= max_mass)
+        sec_mask = self.secondary.mz >= sec_lim
+
+        return np.logical_and(pri_mask, sec_mask)
 
     def theta_mask(self, sep_min: u.Quantity, sep_max: u.Quantity) -> np.ndarray:
         """Calculate the angular separation mask between two galaxies based on their
