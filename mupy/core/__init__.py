@@ -1,2 +1,2 @@
 from .galaxies import Galaxy
-from .tree import Sky
+from .tree import Tree

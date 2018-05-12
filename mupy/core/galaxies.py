@@ -1,21 +1,38 @@
-from astropy.units import Quantity
+import astropy.units as u
 import numpy as np
 
 
 class Galaxy(object):
 
+    _norm_tolerance = 1e-4
+
     def __init__(self,
                  uid: int,
-                 ra: Quantity,
-                 dec: Quantity,
+                 ra: u.Quantity,
+                 dec: u.Quantity,
                  redshift,
+                 mass,
                  zgrid: np.array) -> None:
 
         self.uid = uid
         self.ra = ra
         self.dec = dec
         self.pz = redshift
+        self.mz = mass
         self.zgrid = zgrid
+
+    def __repr__(self) -> str:
+        """Define how a galaxy is represented when printed
+
+        Returns:
+            str
+        """
+
+        return 'Galaxy({uid}, {ra:.4f}, {dec:.4f})'.format(
+            uid=self.uid,
+            ra=self.ra.to(u.degree),
+            dec=self.dec.to(u.degree)
+        )
 
     def prob(self, zlow: [int, float], zhigh: [int, float]) -> float:
         """Calculate the probability of the galaxy residing in the redshift range
@@ -42,7 +59,8 @@ class Galaxy(object):
         Returns:
             bool
         """
-        return abs(1 - self._integrate(self.zgrid, self.pz)) < 1e-4
+
+        return abs(1 - self._integrate(self.zgrid, self.pz)) <= self._norm_tolerance
 
     @staticmethod
     def _integrate(x: np.array, y: np.array) -> float:

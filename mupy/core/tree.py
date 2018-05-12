@@ -1,15 +1,11 @@
-from typing import Sequence
+from typing import NoReturn
 
+import numpy as np
 from scipy.spatial import KDTree
 
-from .galaxies import Galaxy
 
+class Tree(object):
 
-class Sky(object):
+    def __init__(self, tree_input: np.array) -> NoReturn:
 
-    def __init__(self):
-
-        self._tree = None
-        self._galaxies = []
-
-    def add(self, *galaxies: Sequence[Galaxy]):
+        self._tree = KDTree(tree_input)
