@@ -31,10 +31,10 @@ class Pair(object):
 
         return numerator / denominator
 
-    def mass_mask(self, pri_lim, sec_lim, max_mass):
+    def mass_mask(self, pri_log_lim, sec_log_lim, max_mass=12.5):
 
-        pri_mask = np.logical_and(self.primary.mz >= pri_lim, pri_lim <= max_mass)
-        sec_mask = self.secondary.mz >= sec_lim
+        pri_mask = np.logical_and(self.primary.mz >= pri_log_lim, pri_log_lim <= max_mass)
+        sec_mask = self.secondary.mz >= sec_log_lim
 
         return np.logical_and(pri_mask, sec_mask)
 
