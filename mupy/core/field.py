@@ -12,6 +12,7 @@ class Field(object):
         self._completeness_fn = self._make_interpolation_fn(z_grid, completeness_mass)
 
         self.galaxies = []
+        self.pairs = []
 
     @staticmethod
     def _make_interpolation_fn(x: np.ndarray, y: np.ndarray) -> Callable:
