@@ -1,0 +1,49 @@
+@startuml
+
+class Galaxy {
+    + uid: int
+    + coord: SkyCoord
+    + pz: ndarray
+    + mz: ndarray
+    + is_normalised: bool
+    - _zgrid: ndarray
+
+    + prob(): float
+    - _integrate(): float
+}
+
+class Field {
+    + name: str
+    + galaxies: list[Galaxy]
+    - _completeness_fn: func
+
+    + mass_completeness(): ndarray
+}
+
+class Pair {
+    + primary: Galaxy
+    + secondary: Galaxy
+    + pair_pdf: ndarray[float]
+    + separation: Quantity
+    - _cosmology
+
+    + mass_mask(): ndarray[bool]
+    + theta_mask(): ndarray[bool]
+    - calc_angular_separations(): Quantity
+
+}
+
+class MergerCase {
+    + sep_min: Quantity
+    + sep_max: Quantity
+    + pri_log_mass: float
+    + merger_mu: float
+}
+
+
+Galaxy <|-- Field: contains many
+Galaxy <|-- Pair: contains 2
+MergerCase --|> Field : contains many
+MergerCase --|> Pair : contains many
+
+@enduml
