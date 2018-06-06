@@ -5,7 +5,7 @@ from astropy.coordinates import SkyCoord
 import numpy as np
 import numpy.testing as nt
 
-from mupy.core import Galaxy
+from src.core import Galaxy
 
 
 class Tests_Galaxy(unittest.TestCase):
