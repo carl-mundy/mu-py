@@ -1,6 +1,8 @@
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 import numpy as np
+from scipy.integrate import simps
+from scipy.interpolate import interp1d
 
 
 class Galaxy(object):
@@ -17,9 +19,26 @@ class Galaxy(object):
 
         self.uid = uid
         self.coord = SkyCoord(ra, dec)
-        self.pz = redshift
+
+        self._pz = redshift
         self.mz = mass
-        self.zgrid = zgrid
+        self._zgrid = zgrid
+
+        self._pz_interp = interp1d(y=self._pz, x=self._zgrid)
+
+    def w1(self, zgrid=None):
+
+        if zgrid is None:
+            zgrid = self._zgrid
+
+        return np.ones(zgrid.shape, dtype=bool)
+
+    def pz(self, zgrid=None):
+
+        if zgrid is None:
+            zgrid = self._zgrid
+
+        return self._pz_interp(zgrid)
 
     def __repr__(self) -> str:
         """Define how a galaxy is represented when printed
@@ -47,8 +66,8 @@ class Galaxy(object):
             float
         """
 
-        z_mask = np.logical_and(self.zgrid >= zlow, self.zgrid < zhigh)
-        integral = self._integrate(self.zgrid[z_mask], self.pz[z_mask])
+        z_mask = np.logical_and(self._zgrid >= zlow, self._zgrid < zhigh)
+        integral = self._integrate(self._zgrid[z_mask], self.pz[z_mask])
 
         return integral
 
@@ -60,7 +79,7 @@ class Galaxy(object):
             bool
         """
 
-        return abs(1 - self._integrate(self.zgrid, self.pz)) <= self._norm_tolerance
+        return abs(1 - self._integrate(self._zgrid, self.pz)) <= self._norm_tolerance
 
     @staticmethod
     def _integrate(x: np.array, y: np.array) -> float:
@@ -73,4 +92,4 @@ class Galaxy(object):
         Returns:
             float
         """
-        return np.trapz(y, x)
+        return simps(y=y, x=x)
