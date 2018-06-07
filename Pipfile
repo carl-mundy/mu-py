@@ -9,6 +9,7 @@ numpy = "*"
 scipy = "*"
 
 [dev-packages]
+matplotlib = "*"
 
 [requires]
 python_version = "3.6"

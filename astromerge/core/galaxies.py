@@ -67,7 +67,7 @@ class Galaxy(object):
         """
 
         z_mask = np.logical_and(self._zgrid >= zlow, self._zgrid < zhigh)
-        integral = self._integrate(self._zgrid[z_mask], self.pz[z_mask])
+        integral = self._integrate(self._zgrid[z_mask], self.pz()[z_mask])
 
         return integral
 
@@ -79,7 +79,7 @@ class Galaxy(object):
             bool
         """
 
-        return abs(1 - self._integrate(self._zgrid, self.pz)) <= self._norm_tolerance
+        return abs(1 - self._integrate(self._zgrid, self.pz())) <= self._norm_tolerance
 
     @staticmethod
     def _integrate(x: np.array, y: np.array) -> float:
