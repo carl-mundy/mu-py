@@ -8,6 +8,6 @@ install:
   - pipenv install
 script:
   - python -m unittest discover -v
-  - python coverage
+  - coverage run
 after_success:
     - coveralls
